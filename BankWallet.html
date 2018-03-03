@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="web3.min.js"></script>
+    <title>Test</title>
+	 
+  </head>
+  <body bgcolor="pink">
+   <center><h1><p> BANK PROCESS </p></h1>
+
+	<label>Amount<input id="name1" type="text"/></label>
+	<h1><button id="dep" onclick="deposit()">DEPOSIT</button><br><br></h1>
+
+	<label>Amount<input id="name2" type="text"/></label>
+	<h1><button id="withd" onclick="withdraw()">WITHDRAW</button><br><br></h1>
+
+	<label>Address<input id="name3" type="text"/></label>
+	<label>Amount<input id="name4" type="text"/></label>
+	<h1><button id="trans" onclick="transfer()">TRANSFER</button><br><br></h1>
+
+	<label>Address Spender<input id="name5" type="text"/></label>
+	<label>Amount<input id="name6" type="text"/></label>
+	<h1><button id="app" onclick="approve()">APPROVE</button><br><br></h1>
+
+	<label>Address Owner<input id="name7" type="text"/></label>
+	<label>Address Spender<input id="name8" type="text"/></label>
+	<h1><button id="all" onclick="allowance()">ALLOWANCE</button><br><br></h1>
+
+	<label>Address From<input id="name9" type="text"/></label>
+	<label>Address To<input id="name10" type="text"/></label>	
+	<label>Amount<input id="name11" type="text"/></label>
+	<h1><button id="transfrom" onclick="transferfrom()">TRANSFER FROM</button><br><br></h1>
+	
+	<label>New Address<input id="name12" type="text"/></label>
+	<h1><button id="bal" onclick="transferownership()">TRANSFER OWNERSHIP</button><br><br></h1>
+
+	<label>Address<input id="name13" type="text"/></label>
+	<h1><button id="bal" onclick="balanceof()">BALANCE</button><br><br></h1>
+
+</center>
+<pre id="hashresult"></pre>
+Previous Hash : <pre id="prehashresult"></pre>
+
+</body>
+
+<script>
+   
+        web3.eth.defaultAccount = web3.eth.accounts[0];
+        var bankkcon = web3.eth.contract([
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_owner",
+				"type": "address"
+			}
+		],
+		"name": "balanceOf",
+		"outputs": [
+			{
+				"name": "balance",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "_owner",
+				"type": "address"
+			},
+			{
+				"name": "_spender",
+				"type": "address"
+			}
+		],
+		"name": "allowance",
+		"outputs": [
+			{
+				"name": "remaining",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "totalSupply",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"name": "_owner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"name": "_spender",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"name": "Approval",
+		"type": "event"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "withdraw",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"name": "previousOwner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "OwnershipTransferred",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"name": "_from",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"name": "_to",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"name": "Transfer",
+		"type": "event"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_from",
+				"type": "address"
+			},
+			{
+				"name": "_to",
+				"type": "address"
+			},
+			{
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"name": "transferFrom",
+		"outputs": [
+			{
+				"name": "success",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_spender",
+				"type": "address"
+			},
+			{
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"name": "approve",
+		"outputs": [
+			{
+				"name": "success",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "transferOwnership",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "deposit",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_to",
+				"type": "address"
+			},
+			{
+				"name": "_value",
+				"type": "uint256"
+			}
+		],
+		"name": "transfer",
+		"outputs": [
+			{
+				"name": "success",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]);
+
+
+
+	var bankk= bankkcon.at('0x25f81fecf55a4dad0735e5da288e11d0669b1505');
+
+	var damount=document.getElementById("name1");
+	
+	var wamount=document.getElementById("name2");
+	
+	var tadd=document.getElementById("name3");
+	var tamount=document.getElementById("name4");
+
+	var aadd=document.getElementById("name5");
+	var aamount=document.getElementById("name6");
+
+	var alown=document.getElementById("name7");
+	var alspen=document.getElementById("name8");
+	
+	var fradd=document.getElementById("name9");
+	var toadd=document.getElementById("name10");
+	var tramount=document.getElementById("name11");
+
+	var transadd=document.getElementById("name12");
+
+	var baladd=document.getElementById("name13");
+
+	var output = document.getElementById('hashresult');
+     	var preoutput = document.getElementById('prehashresult');
+     if(!web3.isConnected()) {
+  
+        console.log("Ok");
+        
+      } else {
+        console.log("no");
+      }
+      web3.version.getNetwork((err, netId) => {
+            switch (netId) {
+              case "1":
+                console.log('This is mainnet')
+                break
+              case "2":
+                console.log('This is the deprecated Morden test network.')
+                break
+              case "3":
+                console.log('This is the ropsten test network.')
+                break
+              case "4":
+                console.log('This is the Rinkeby test network.')
+                break
+              case "42":
+                console.log('This is the Kovan test network.')
+                break
+              default:
+                console.log('This is an unknown network.')
+            }
+        })
+
+
+function deposit()
+	{
+	 
+	 return bankk.deposit(damount.value,function(err,res){
+                if (!err) {
+                   
+		    output.innerText = res;
+                }
+                else{
+		  
+                  output.innerText = "Error";
+                }
+              });
+	}
+
+function withdraw()
+	{
+	 
+	 return bankk.withdraw(wamount.value,function(err,res){
+                if (!err) {
+                   
+		    output.innerText = res;
+                }
+                else{
+		  
+                  output.innerText = "Error";
+                }
+              });
+	}
+
+function transfer()
+	{
+	 
+	 return bankk.transfer(tadd.value,tamount.value,function(err,res){
+                if (!err) {
+                   
+		    output.innerText = res;
+                }
+                else{
+		  
+                  output.innerText = "Error";
+                }
+              });
+	}
+
+function approve()
+	{
+	 
+	 return bankk.approve(aadd.value,aamount.value,function(err,res){
+                if (!err) {
+                   
+		    output.innerText = res;
+                }
+                else{
+		  
+                  output.innerText = "Error";
+                }
+              });
+	}
+
+function allowance()
+	{
+	 
+	 return bankk.allowance(alown.value,alspen.value,function(err,res){
+                if (!err) {
+                  output.innerText = res;
+                
+                }
+                else{
+		  
+                  output.innerText = "Error";
+                }
+              });
+	}
+
+function transferfrom()
+	{
+	 
+	 return bankk.transferFrom(fradd.value,toadd.value,tamount.value,function(err,res){
+                if (!err) {
+                   
+		    output.innerText = res;
+                }
+                else{
+		  
+                  output.innerText = "Error";
+                }
+              });
+	}
+
+function transferownership()
+	{
+	 
+	 return bankk.transferOwnership(transadd.value,function(err,res){
+                if (!err) {
+                   
+		    output.innerText = res;
+                }
+                else{
+		  
+                  output.innerText = "Error";
+                }
+              });
+	}
+
+
+function balanceof()
+	{
+	 
+	 return bankk.balanceOf(baladd.value,function(err,res){
+                if (!err) {
+                   
+		    output.innerText = res;
+                }
+                else{
+		  
+                  output.innerText = "Error";
+                }
+              });
+	}
+
+
+</script>
+</html>
