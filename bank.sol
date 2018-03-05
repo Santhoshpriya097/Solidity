@@ -38,7 +38,7 @@ contract StandardToken is Token{
      }
      
      function transfer(address _to,uint256 _value) returns(bool success) {
-         require (balances[msg.sender] >= _value && _value > 0 )
+         require (balances[msg.sender] >= _value && _value > 0 );
              
              balances[msg.sender] -= _value;
              balances[_to] += _value;
@@ -47,7 +47,7 @@ contract StandardToken is Token{
      }
      
      function transferFrom(address _from,address _to,uint256 _value) returns(bool success) {
-         require (balances[_from] >= _value && _value > 0 && alowed[_from][_to] >= _value)
+         require (balances[_from] >= _value && _value > 0 && alowed[_from][_to] >= _value);
              
              balances[_from] -= _value;
              balances[_to] += _value;
